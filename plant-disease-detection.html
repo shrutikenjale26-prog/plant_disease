@@ -1,0 +1,814 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>PlantCare AI - Disease Detection</title>
+        <meta
+            name="description"
+            content="AI-powered plant disease detection service. Upload or capture photos of your plants to identify diseases and get instant treatment recommendations."
+        />
+
+        <!-- Tailwind CSS -->
+        <script src="https://cdn.tailwindcss.com"></script>
+        <script>
+            tailwind.config = {
+                theme: {
+                    extend: {
+                        colors: {
+                            forest: "hsl(142, 52%, 19%)",
+                            leaf: "hsl(122, 39%, 49%)",
+                            warning: "hsl(32, 100%, 50%)",
+                            error: "hsl(14, 100%, 57%)",
+                        },
+                    },
+                },
+            };
+        </script>
+
+        <!-- Lucide Icons -->
+        <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+
+        <style>
+            .bg-forest {
+                background-color: hsl(142, 52%, 19%);
+            }
+            .bg-leaf {
+                background-color: hsl(122, 39%, 49%);
+            }
+            .bg-warning {
+                background-color: hsl(32, 100%, 50%);
+            }
+            .text-forest {
+                color: hsl(142, 52%, 19%);
+            }
+            .text-leaf {
+                color: hsl(122, 39%, 49%);
+            }
+            .border-forest {
+                border-color: hsl(142, 52%, 19%);
+            }
+            .hover\:bg-forest:hover {
+                background-color: hsl(142, 52%, 15%);
+            }
+            .hover\:bg-leaf:hover {
+                background-color: hsl(122, 39%, 45%);
+            }
+        </style>
+    </head>
+    <body class="bg-gray-50 min-h-screen">
+        <!-- Header -->
+        <header class="bg-white shadow-sm border-b border-gray-200">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between items-center h-16">
+                    <div class="flex items-center space-x-3">
+                        <div
+                            class="w-10 h-10 bg-forest rounded-lg flex items-center justify-center"
+                        >
+                            <i
+                                data-lucide="leaf"
+                                class="text-white text-lg"
+                            ></i>
+                        </div>
+                        <div>
+                            <h1 class="text-xl font-bold text-gray-900">
+                                PlantCare AI
+                            </h1>
+                            <p class="text-xs text-gray-500">
+                                Disease Detection
+                            </p>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <button
+                            class="flex items-center px-3 py-2 text-gray-600 hover:text-gray-900 rounded-md"
+                        >
+                            <i data-lucide="calendar" class="h-5 w-5 mr-2"></i>
+                            History
+                        </button>
+                        <button
+                            class="p-2 text-gray-600 hover:text-gray-900 rounded-md"
+                        >
+                            <i data-lucide="user-circle" class="text-2xl"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <!-- Hero Section -->
+            <div class="text-center mb-12">
+                <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
+                    Detect Plant Diseases Instantly
+                </h2>
+                <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+                    Upload or capture a photo of your plant to identify diseases
+                    and get instant treatment recommendations powered by AI
+                </p>
+            </div>
+
+            <!-- Image Capture Section -->
+            <div
+                class="bg-white rounded-xl shadow-sm border border-gray-200 mb-8"
+            >
+                <div class="p-6 sm:p-8">
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <!-- Camera Capture -->
+                        <div class="space-y-4">
+                            <h3
+                                class="text-xl font-semibold text-gray-900 flex items-center"
+                            >
+                                <i
+                                    data-lucide="camera"
+                                    class="text-forest mr-3"
+                                ></i>
+                                Take Photo
+                            </h3>
+                            <div
+                                class="bg-gray-100 rounded-xl p-8 text-center border-2 border-dashed border-gray-300 hover:border-forest transition-colors cursor-pointer"
+                            >
+                                <i
+                                    data-lucide="camera"
+                                    class="text-4xl text-gray-400 mb-4 mx-auto"
+                                ></i>
+                                <p class="text-gray-600 font-medium">
+                                    Click to open camera
+                                </p>
+                                <p class="text-sm text-gray-500 mt-2">
+                                    Best for mobile devices
+                                </p>
+                            </div>
+                            <button
+                                class="w-full bg-forest hover:bg-forest/90 text-white py-3 px-4 rounded-lg font-medium transition-colors"
+                            >
+                                <i
+                                    data-lucide="camera"
+                                    class="h-4 w-4 mr-2 inline"
+                                ></i>
+                                Open Camera
+                            </button>
+                        </div>
+
+                        <!-- File Upload -->
+                        <div class="space-y-4">
+                            <h3
+                                class="text-xl font-semibold text-gray-900 flex items-center"
+                            >
+                                <i
+                                    data-lucide="upload"
+                                    class="text-forest mr-3"
+                                ></i>
+                                Upload Image
+                            </h3>
+                            <div
+                                class="bg-gray-100 rounded-xl p-8 text-center border-2 border-dashed border-gray-300 hover:border-forest transition-colors cursor-pointer"
+                            >
+                                <i
+                                    data-lucide="upload"
+                                    class="text-4xl text-gray-400 mb-4 mx-auto"
+                                ></i>
+                                <p class="text-gray-600 font-medium">
+                                    Drop image here or click to browse
+                                </p>
+                                <p class="text-sm text-gray-500 mt-2">
+                                    JPG, PNG up to 10MB
+                                </p>
+                            </div>
+                            <button
+                                class="w-full bg-leaf hover:bg-leaf/90 text-white py-3 px-4 rounded-lg font-medium transition-colors"
+                            >
+                                <i
+                                    data-lucide="folder-open"
+                                    class="h-4 w-4 mr-2 inline"
+                                ></i>
+                                Browse Files
+                            </button>
+                            <input
+                                type="file"
+                                accept="image/*"
+                                class="hidden"
+                                id="file-input"
+                            />
+                        </div>
+                    </div>
+
+                    <!-- Tips Section -->
+                    <div class="mt-8 bg-blue-50 rounded-xl p-6">
+                        <h4
+                            class="font-semibold text-blue-900 mb-3 flex items-center"
+                        >
+                            <i data-lucide="lightbulb" class="mr-2"></i>
+                            Tips for Better Results
+                        </h4>
+                        <ul class="space-y-2 text-blue-800">
+                            <li class="flex items-start">
+                                <i
+                                    data-lucide="check-circle"
+                                    class="mt-1 mr-3 text-blue-600 h-4 w-4 flex-shrink-0"
+                                ></i>
+                                <span
+                                    >Take clear, well-lit photos of affected
+                                    plant parts</span
+                                >
+                            </li>
+                            <li class="flex items-start">
+                                <i
+                                    data-lucide="check-circle"
+                                    class="mt-1 mr-3 text-blue-600 h-4 w-4 flex-shrink-0"
+                                ></i>
+                                <span
+                                    >Include both healthy and diseased areas
+                                    when possible</span
+                                >
+                            </li>
+                            <li class="flex items-start">
+                                <i
+                                    data-lucide="check-circle"
+                                    class="mt-1 mr-3 text-blue-600 h-4 w-4 flex-shrink-0"
+                                ></i>
+                                <span
+                                    >Avoid blurry images or extreme
+                                    close-ups</span
+                                >
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sample Analysis Results (Hidden by default) -->
+            <div id="results-section" class="hidden space-y-8">
+                <!-- Plant Identification Result -->
+                <div
+                    class="bg-white rounded-xl shadow-sm border border-gray-200"
+                >
+                    <div class="p-6 sm:p-8">
+                        <div class="flex items-center mb-6">
+                            <div
+                                class="w-12 h-12 bg-leaf rounded-full flex items-center justify-center mr-4"
+                            >
+                                <i
+                                    data-lucide="sprout"
+                                    class="text-white text-xl"
+                                ></i>
+                            </div>
+                            <div>
+                                <h3 class="text-2xl font-bold text-gray-900">
+                                    Plant Identified
+                                </h3>
+                                <p class="text-gray-600">
+                                    Analysis completed successfully
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="grid md:grid-cols-2 gap-8">
+                            <div>
+                                <div
+                                    class="w-full h-64 bg-gray-200 rounded-xl flex items-center justify-center"
+                                >
+                                    <p class="text-gray-500">
+                                        Plant Image Here
+                                    </p>
+                                </div>
+                                <p
+                                    class="text-sm text-gray-500 mt-2 text-center"
+                                >
+                                    Your uploaded image
+                                </p>
+                            </div>
+
+                            <div class="space-y-4">
+                                <div class="bg-green-50 rounded-xl p-6">
+                                    <h4
+                                        class="font-semibold text-green-900 mb-2"
+                                    >
+                                        Tomato Plant
+                                    </h4>
+                                    <p class="text-green-800 text-sm mb-3">
+                                        Solanum lycopersicum
+                                    </p>
+                                    <div class="flex items-center mb-3">
+                                        <span
+                                            class="text-green-700 text-sm font-medium"
+                                            >Confidence:</span
+                                        >
+                                        <div
+                                            class="ml-3 flex-1 bg-green-200 rounded-full h-2"
+                                        >
+                                            <div
+                                                class="bg-green-600 h-2 rounded-full w-[94%]"
+                                            ></div>
+                                        </div>
+                                        <span
+                                            class="ml-3 text-green-700 text-sm font-semibold"
+                                            >94%</span
+                                        >
+                                    </div>
+                                    <p class="text-green-800 text-sm">
+                                        Common vegetable plant in the nightshade
+                                        family, widely cultivated for edible
+                                        fruit.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Disease Detection Result -->
+                <div
+                    class="bg-white rounded-xl shadow-sm border border-gray-200"
+                >
+                    <div class="p-6 sm:p-8">
+                        <div class="flex items-center mb-6">
+                            <div
+                                class="w-12 h-12 bg-warning rounded-full flex items-center justify-center mr-4"
+                            >
+                                <i
+                                    data-lucide="triangle-alert"
+                                    class="text-white text-xl"
+                                ></i>
+                            </div>
+                            <div>
+                                <h3 class="text-2xl font-bold text-gray-900">
+                                    Disease Detected
+                                </h3>
+                                <p class="text-gray-600">
+                                    Found 1 potential disease
+                                </p>
+                            </div>
+                        </div>
+
+                        <div
+                            class="bg-orange-50 text-orange-900 rounded-xl p-6 mb-6"
+                        >
+                            <div class="flex items-start justify-between">
+                                <div class="flex-1">
+                                    <h4 class="font-semibold text-lg mb-2">
+                                        Early Blight
+                                    </h4>
+                                    <p class="text-sm mb-3">
+                                        Alternaria solani
+                                    </p>
+                                    <div class="flex items-center mb-4">
+                                        <span class="text-sm font-medium"
+                                            >Severity:</span
+                                        >
+                                        <div class="ml-3 flex space-x-1">
+                                            <div
+                                                class="w-3 h-3 rounded-full bg-orange-500"
+                                            ></div>
+                                            <div
+                                                class="w-3 h-3 rounded-full bg-orange-500"
+                                            ></div>
+                                            <div
+                                                class="w-3 h-3 rounded-full bg-gray-300"
+                                            ></div>
+                                            <div
+                                                class="w-3 h-3 rounded-full bg-gray-300"
+                                            ></div>
+                                        </div>
+                                        <span class="ml-3 text-sm font-semibold"
+                                            >Moderate</span
+                                        >
+                                    </div>
+                                    <p class="text-sm">
+                                        A common fungal disease causing dark
+                                        brown spots with concentric rings on
+                                        leaves, leading to yellowing and
+                                        defoliation.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Treatment Recommendations -->
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <!-- Immediate Actions -->
+                            <div class="bg-orange-50 rounded-xl p-6">
+                                <h5
+                                    class="font-semibold text-orange-900 mb-4 flex items-center"
+                                >
+                                    <i data-lucide="clock" class="mr-2"></i>
+                                    Immediate Actions
+                                </h5>
+                                <ul class="space-y-3">
+                                    <li
+                                        class="flex items-start text-orange-800"
+                                    >
+                                        <div
+                                            class="w-2 h-2 bg-orange-600 rounded-full mt-2 mr-3 flex-shrink-0"
+                                        ></div>
+                                        <span class="text-sm"
+                                            >Remove affected leaves and dispose
+                                            of them away from garden</span
+                                        >
+                                    </li>
+                                    <li
+                                        class="flex items-start text-orange-800"
+                                    >
+                                        <div
+                                            class="w-2 h-2 bg-orange-600 rounded-full mt-2 mr-3 flex-shrink-0"
+                                        ></div>
+                                        <span class="text-sm"
+                                            >Improve air circulation around
+                                            plants</span
+                                        >
+                                    </li>
+                                    <li
+                                        class="flex items-start text-orange-800"
+                                    >
+                                        <div
+                                            class="w-2 h-2 bg-orange-600 rounded-full mt-2 mr-3 flex-shrink-0"
+                                        ></div>
+                                        <span class="text-sm"
+                                            >Avoid overhead watering</span
+                                        >
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <!-- Treatment Options -->
+                            <div class="bg-blue-50 rounded-xl p-6">
+                                <h5
+                                    class="font-semibold text-blue-900 mb-4 flex items-center"
+                                >
+                                    <i
+                                        data-lucide="shield-alert"
+                                        class="mr-2"
+                                    ></i>
+                                    Treatment Options
+                                </h5>
+                                <ul class="space-y-3">
+                                    <li class="flex items-start text-blue-800">
+                                        <div
+                                            class="w-2 h-2 bg-blue-600 rounded-full mt-2 mr-3 flex-shrink-0"
+                                        ></div>
+                                        <span class="text-sm"
+                                            >Apply copper-based fungicide every
+                                            7-14 days</span
+                                        >
+                                    </li>
+                                    <li class="flex items-start text-blue-800">
+                                        <div
+                                            class="w-2 h-2 bg-blue-600 rounded-full mt-2 mr-3 flex-shrink-0"
+                                        ></div>
+                                        <span class="text-sm"
+                                            >Use preventive fungicides like
+                                            chlorothalonil</span
+                                        >
+                                    </li>
+                                    <li class="flex items-start text-blue-800">
+                                        <div
+                                            class="w-2 h-2 bg-blue-600 rounded-full mt-2 mr-3 flex-shrink-0"
+                                        ></div>
+                                        <span class="text-sm"
+                                            >Consider organic neem oil
+                                            treatments</span
+                                        >
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Prevention Tips -->
+                        <div class="mt-6 bg-green-50 rounded-xl p-6">
+                            <h5
+                                class="font-semibold text-green-900 mb-4 flex items-center"
+                            >
+                                <i data-lucide="check-circle" class="mr-2"></i>
+                                Prevention for Future
+                            </h5>
+                            <div class="grid sm:grid-cols-2 gap-4">
+                                <div class="flex items-start text-green-800">
+                                    <i
+                                        data-lucide="check-circle"
+                                        class="text-green-600 text-sm mt-1 mr-3 flex-shrink-0"
+                                    ></i>
+                                    <span class="text-sm"
+                                        >Practice crop rotation</span
+                                    >
+                                </div>
+                                <div class="flex items-start text-green-800">
+                                    <i
+                                        data-lucide="check-circle"
+                                        class="text-green-600 text-sm mt-1 mr-3 flex-shrink-0"
+                                    ></i>
+                                    <span class="text-sm"
+                                        >Ensure proper plant spacing</span
+                                    >
+                                </div>
+                                <div class="flex items-start text-green-800">
+                                    <i
+                                        data-lucide="check-circle"
+                                        class="text-green-600 text-sm mt-1 mr-3 flex-shrink-0"
+                                    ></i>
+                                    <span class="text-sm"
+                                        >Water at soil level, not leaves</span
+                                    >
+                                </div>
+                                <div class="flex items-start text-green-800">
+                                    <i
+                                        data-lucide="check-circle"
+                                        class="text-green-600 text-sm mt-1 mr-3 flex-shrink-0"
+                                    ></i>
+                                    <span class="text-sm"
+                                        >Apply mulch to reduce soil splash</span
+                                    >
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="flex flex-col sm:flex-row gap-4">
+                    <button
+                        class="flex-1 bg-forest hover:bg-forest/90 text-white py-3 px-4 rounded-lg font-medium transition-colors"
+                    >
+                        <i data-lucide="camera" class="h-4 w-4 mr-2 inline"></i>
+                        Analyze Another Plant
+                    </button>
+                    <button
+                        class="flex-1 border border-forest text-forest hover:bg-forest/5 py-3 px-4 rounded-lg font-medium transition-colors"
+                    >
+                        <i
+                            data-lucide="download"
+                            class="h-4 w-4 mr-2 inline"
+                        ></i>
+                        Save Report
+                    </button>
+                    <button
+                        class="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-3 px-4 rounded-lg font-medium transition-colors"
+                    >
+                        <i
+                            data-lucide="share-2"
+                            class="h-4 w-4 mr-2 inline"
+                        ></i>
+                        Share Results
+                    </button>
+                </div>
+            </div>
+
+            <!-- Additional Resources -->
+            <div
+                class="bg-white rounded-xl shadow-sm border border-gray-200 mt-12"
+            >
+                <div class="p-6 sm:p-8">
+                    <h3 class="text-xl font-bold text-gray-900 mb-6">
+                        Additional Resources
+                    </h3>
+                    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <div
+                            class="text-center p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors cursor-pointer"
+                        >
+                            <i
+                                data-lucide="book"
+                                class="text-3xl text-forest mb-3 mx-auto"
+                            ></i>
+                            <h4 class="font-semibold text-gray-900 mb-2">
+                                Disease Database
+                            </h4>
+                            <p class="text-sm text-gray-600">
+                                Browse our comprehensive plant disease library
+                            </p>
+                        </div>
+                        <div
+                            class="text-center p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors cursor-pointer"
+                        >
+                            <i
+                                data-lucide="calendar"
+                                class="text-3xl text-forest mb-3 mx-auto"
+                            ></i>
+                            <h4 class="font-semibold text-gray-900 mb-2">
+                                Treatment Calendar
+                            </h4>
+                            <p class="text-sm text-gray-600">
+                                Track your plant treatments and schedules
+                            </p>
+                        </div>
+                        <div
+                            class="text-center p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors cursor-pointer"
+                        >
+                            <i
+                                data-lucide="users"
+                                class="text-3xl text-forest mb-3 mx-auto"
+                            ></i>
+                            <h4 class="font-semibold text-gray-900 mb-2">
+                                Expert Community
+                            </h4>
+                            <p class="text-sm text-gray-600">
+                                Connect with plant care experts and enthusiasts
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="bg-white border-t border-gray-200 mt-16">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+                <div class="grid md:grid-cols-4 gap-8">
+                    <div>
+                        <div class="flex items-center space-x-2 mb-4">
+                            <div
+                                class="w-8 h-8 bg-forest rounded-lg flex items-center justify-center"
+                            >
+                                <i data-lucide="leaf" class="text-white"></i>
+                            </div>
+                            <span class="font-bold text-gray-900"
+                                >PlantCare AI</span
+                            >
+                        </div>
+                        <p class="text-gray-600 text-sm">
+                            Advanced AI-powered plant disease detection and care
+                            recommendations.
+                        </p>
+                    </div>
+                    <div>
+                        <h4 class="font-semibold text-gray-900 mb-3">
+                            Features
+                        </h4>
+                        <ul class="space-y-2 text-sm text-gray-600">
+                            <li>Disease Detection</li>
+                            <li>Plant Identification</li>
+                            <li>Treatment Guides</li>
+                            <li>Prevention Tips</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="font-semibold text-gray-900 mb-3">
+                            Resources
+                        </h4>
+                        <ul class="space-y-2 text-sm text-gray-600">
+                            <li>Plant Database</li>
+                            <li>Expert Community</li>
+                            <li>Research Papers</li>
+                            <li>API Documentation</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="font-semibold text-gray-900 mb-3">
+                            Support
+                        </h4>
+                        <ul class="space-y-2 text-sm text-gray-600">
+                            <li>Help Center</li>
+                            <li>Contact Us</li>
+                            <li>Privacy Policy</li>
+                            <li>Terms of Service</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="border-t border-gray-200 mt-8 pt-8 text-center">
+                    <p class="text-gray-500 text-sm">
+                        &copy; 2024 PlantCare AI. All rights reserved.
+                    </p>
+                </div>
+            </div>
+        </footer>
+
+        <!-- Processing Modal (Hidden by default) -->
+        <div
+            id="processing-modal"
+            class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+        >
+            <div class="bg-white rounded-xl p-8 max-w-md mx-4">
+                <div class="text-center">
+                    <div
+                        class="w-16 h-16 bg-forest rounded-full flex items-center justify-center mx-auto mb-4"
+                    >
+                        <div
+                            class="animate-spin rounded-full h-8 w-8 border-b-2 border-white"
+                        ></div>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-900 mb-2">
+                        Analyzing Your Plant
+                    </h3>
+                    <p class="text-gray-600 mb-4">
+                        Our AI is identifying the plant and checking for
+                        diseases...
+                    </p>
+                    <div
+                        class="w-full bg-gray-200 rounded-full h-2 max-w-xs mx-auto"
+                    >
+                        <div
+                            class="bg-forest h-2 rounded-full w-3/4 transition-all duration-1000"
+                        ></div>
+                    </div>
+                    <p class="text-sm text-gray-500 mt-2">
+                        This usually takes 10-15 seconds
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            // Initialize Lucide icons
+            lucide.createIcons();
+
+            // Simple demo functionality
+            document
+                .getElementById("file-input")
+                .addEventListener("change", function (e) {
+                    if (e.target.files[0]) {
+                        showProcessing();
+                        setTimeout(() => {
+                            hideProcessing();
+                            showResults();
+                        }, 3000);
+                    }
+                });
+
+            // Camera and upload button handlers
+            document.querySelectorAll("button").forEach((button) => {
+                if (
+                    button.textContent.includes("Open Camera") ||
+                    button.textContent.includes("Browse Files")
+                ) {
+                    button.addEventListener("click", function () {
+                        if (this.textContent.includes("Browse Files")) {
+                            document.getElementById("file-input").click();
+                        } else {
+                            showProcessing();
+                            setTimeout(() => {
+                                hideProcessing();
+                                showResults();
+                            }, 3000);
+                        }
+                    });
+                }
+            });
+
+            // Upload area handlers
+            document.querySelectorAll(".cursor-pointer").forEach((area) => {
+                if (
+                    area.querySelector('[data-lucide="upload"]') ||
+                    area.querySelector('[data-lucide="camera"]')
+                ) {
+                    area.addEventListener("click", function () {
+                        if (this.querySelector('[data-lucide="upload"]')) {
+                            document.getElementById("file-input").click();
+                        } else {
+                            showProcessing();
+                            setTimeout(() => {
+                                hideProcessing();
+                                showResults();
+                            }, 3000);
+                        }
+                    });
+                }
+            });
+
+            function showProcessing() {
+                document
+                    .getElementById("processing-modal")
+                    .classList.remove("hidden");
+            }
+
+            function hideProcessing() {
+                document
+                    .getElementById("processing-modal")
+                    .classList.add("hidden");
+            }
+
+            function showResults() {
+                document
+                    .getElementById("results-section")
+                    .classList.remove("hidden");
+                document
+                    .getElementById("results-section")
+                    .scrollIntoView({ behavior: "smooth" });
+            }
+
+            // Drag and drop functionality
+            const uploadAreas = document.querySelectorAll(".border-dashed");
+            uploadAreas.forEach((area) => {
+                area.addEventListener("dragover", function (e) {
+                    e.preventDefault();
+                    this.classList.add("border-forest");
+                });
+
+                area.addEventListener("dragleave", function (e) {
+                    e.preventDefault();
+                    this.classList.remove("border-forest");
+                });
+
+                area.addEventListener("drop", function (e) {
+                    e.preventDefault();
+                    this.classList.remove("border-forest");
+                    if (e.dataTransfer.files[0]) {
+                        showProcessing();
+                        setTimeout(() => {
+                            hideProcessing();
+                            showResults();
+                        }, 3000);
+                    }
+                });
+            });
+        </script>
+    </body>
+</html>
